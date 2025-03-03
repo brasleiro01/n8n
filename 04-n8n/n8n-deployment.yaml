@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: n8n-deployment
-  namespace: n8n
+  namespace: n8n-1
   labels: &labels
     app: n8n
     component: deployment
@@ -15,36 +15,9 @@ spec:
       labels: *labels
     spec:
       containers:
-        - command:
-            - /bin/sh
-          args:
-            - -c
-            - sleep 5; n8n start
-          env:
-            - name: DB_TYPE
-              value: postgresdb
-            - name: DB_POSTGRESDB_HOST
-              value: postgres-service.n8n.svc.cluster.local
-            - name: DB_POSTGRESDB_PORT
-              value: "5432"
-            - name: DB_POSTGRESDB_DATABASE
-              value: n8n
-            - name: DB_POSTGRESDB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_NON_ROOT_USER
-            - name: DB_POSTGRESDB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_NON_ROOT_PASSWORD
-            - name: N8N_PROTOCOL
-              value: http
-            - name: N8N_PORT
-              value: "5678"
-          image: n8nio/n8n
-          name: n8n
+        - name: n8n
+          image: n8nio/n8n:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 5678
@@ -74,10 +47,4 @@ spec:
       volumes:
         - name: n8n-data
           persistentVolumeClaim:
-            claimName: n8n-claim0
-        - name: n8n-secret
-          secret:
-            secretName: n8n-secret
-        - name: postgres-secret
-          secret:
-            secretName: postgres-secret
+            claimName: n8n-data  # Referência ao PVC n8n-claim0
