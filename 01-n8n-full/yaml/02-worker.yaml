@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: n8n
+  name: n8n-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n-worker
+  template:
+    metadata:
+      labels:
+        app: n8n-worker
+    spec:
+      containers:
+      - name: n8n-worker
+        image: n8nio/n8n:latest
+        ports:
+          - name: http
+            containerPort: 5678
+        envFrom:
+        - configMapRef:
+            name: n8n-config
+        - secretRef:
+            name: n8n-secrets
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1"
