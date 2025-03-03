@@ -10,7 +10,9 @@ metadata:
 data:
   NODE_ENV: "production"
   GENERIC_TIMEZONE: "America/Sao_Paulo"
-  WEBHOOK_TUNNEL_URL: "http://n8n.mvpos.app.br/" 
+  WEBHOOK_TUNNEL_URL: "http://n8n.mvpos.app.br/"
+  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
+  N8N_RUNNERS_ENABLED: true
   # Database configurations
   DB_TYPE: "postgresdb"
   DB_POSTGRESDB_USER: "n8n"
